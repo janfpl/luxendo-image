@@ -1,0 +1,1073 @@
+{
+  "processingInformation": {
+    "version": "1.0.0",
+    "sources": [
+      "Luxendo MuVi-SPIM, LuxBundle v5.2.2-alpha.5, Embedded v3.17.6-beta, serial-nr: 10279"
+    ],
+    "contains_beads": false,
+    "time_point": "0",
+    "channel": "current",
+    "stack": "01-x00-y00",
+    "objective": "right",
+    "camera": "right",
+    "stack_scan_ids": [
+      "oc:default_st:current_ch:current_tp:0_pm:none"
+    ],
+    "voxel_size_um": {
+      "width": 0.65,
+      "height": 0.65,
+      "depth": 1.0
+    },
+    "image_size_vx": {
+      "width": 2048,
+      "height": 2048,
+      "depth": 1
+    },
+    "affine_to_sample": [
+      {
+        "matrix": [
+          [
+            1.0,
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            1.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0,
+            1.0
+          ]
+        ],
+        "translation": [
+          -1023.5,
+          -1023.5,
+          0.0
+        ]
+      },
+      {
+        "matrix": [
+          [
+            0.65,
+            0.0,
+            -0.0
+          ],
+          [
+            0.0,
+            0.65,
+            -0.0
+          ],
+          [
+            0.0,
+            0.0,
+            -1.0
+          ]
+        ],
+        "translation": [
+          -5200.1,
+          -17002.225,
+          25.986
+        ]
+      },
+      {
+        "matrix": [
+          [
+            0.9568136,
+            0.0,
+            0.2907022
+          ],
+          [
+            -0.0,
+            1.0,
+            0.0
+          ],
+          [
+            -0.2907022,
+            -0.0,
+            0.9568136
+          ]
+        ],
+        "translation": [
+          98.7207,
+          0.0,
+          450.20462
+        ]
+      }
+    ],
+    "detection_directions": [
+      [
+        0.2907022,
+        0.0,
+        0.9568136
+      ]
+    ],
+    "acquisition": [
+      {
+        "microscope_type": "MuVi-SPIM",
+        "serial_number": "10279",
+        "lux_bundle_version": "5.2.2-alpha.5",
+        "embedded_version": "3.17.6-beta",
+        "edits": [],
+        "contains_beads": false,
+        "time_point": "0",
+        "channel": "current",
+        "stack": "01-x00-y00",
+        "objective": "right",
+        "camera": "right",
+        "stack_scan_id": "oc:default_st:current_ch:current_tp:0_pm:none",
+        "number_planes": 1,
+        "stage_positions": [
+          {
+            "type": "linear",
+            "name": "x",
+            "start_um": -17002.225,
+            "end_um": -17002.225,
+            "movement": {
+              "direction": [
+                0.0,
+                -1.0,
+                0.0
+              ],
+              "offset_um": [
+                0.0,
+                0.0,
+                0.0
+              ]
+            }
+          },
+          {
+            "type": "linear",
+            "name": "y",
+            "start_um": -5200.1,
+            "end_um": -5200.1,
+            "movement": {
+              "direction": [
+                -1.0,
+                0.0,
+                0.0
+              ],
+              "offset_um": [
+                0.0,
+                0.0,
+                0.0
+              ]
+            }
+          },
+          {
+            "type": "linear",
+            "name": "z",
+            "start_um": 25.986,
+            "end_um": 25.986,
+            "movement": {
+              "direction": [
+                0.0,
+                0.0,
+                -1.0
+              ],
+              "offset_um": [
+                0.0,
+                0.0,
+                0.0
+              ]
+            }
+          },
+          {
+            "type": "rotation",
+            "name": "r",
+            "start_deg": 16.9,
+            "end_deg": 16.9,
+            "movement": {
+              "direction": [
+                0.0,
+                -1.0,
+                0.0
+              ],
+              "offset_um": [
+                -1564.5991,
+                0.0,
+                107.15854
+              ]
+            }
+          }
+        ],
+        "image_plane_vectors": {
+          "cam_left_to_right": [
+            1.0,
+            0.0,
+            0.0
+          ],
+          "cam_top_to_bottom": [
+            0.0,
+            1.0,
+            0.0
+          ]
+        },
+        "refractive_index": 0.0,
+        "detection": {
+          "wavelength_nm": 0.0,
+          "numerical_aperture": 0.5,
+          "magnification": 10.0,
+          "direction": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "cam_pixel_size_um": {
+            "width": 6.5,
+            "height": 6.5
+          },
+          "sensor_size_px": {
+            "width": 2048,
+            "height": 2048
+          },
+          "crop_offset_px": {
+            "left": 0,
+            "top": 0
+          },
+          "crop_size_px": {
+            "width": 2048,
+            "height": 2048
+          },
+          "dichroic_id": null
+        },
+        "illuminations": [
+          {
+            "objective": "front",
+            "direction": [
+              1.0,
+              0.0,
+              0.0
+            ]
+          },
+          {
+            "objective": "back",
+            "direction": [
+              -1.0,
+              0.0,
+              0.0
+            ]
+          }
+        ],
+        "time_stamps": []
+      }
+    ]
+  },
+  "metaData": {
+    "beamexpander": [
+      {
+        "name": "beamexp",
+        "selection": "2.0 / 4.3 / 10.6 &micro;m"
+      },
+      {
+        "name": "beamint",
+        "selection": "10%"
+      }
+    ],
+    "filterwheels": [
+      {
+        "name": "fw_right",
+        "selection": "LP 498"
+      }
+    ],
+    "lasers": [
+      {
+        "intensity": 0,
+        "manufacturer": "Omicron",
+        "maxPower_mW": 60,
+        "model": "LuxX",
+        "name": "488nm",
+        "on": false,
+        "wavelength_nm": 488
+      },
+      {
+        "intensity": 99,
+        "manufacturer": "Coherent",
+        "maxPower_mW": 50,
+        "model": "Obis LX",
+        "name": "561 nm",
+        "on": false,
+        "wavelength_nm": 561
+      },
+      {
+        "intensity": 0,
+        "manufacturer": "Coherent",
+        "maxPower_mW": 60,
+        "model": "Obis LX",
+        "name": "642 nm",
+        "on": false,
+        "wavelength_nm": 642
+      },
+      {
+        "intensity": 0,
+        "manufacturer": "Coherent",
+        "maxPower_mW": 60,
+        "model": "Obis LX",
+        "name": "685 nm",
+        "on": false,
+        "wavelength_nm": 685
+      },
+      {
+        "intensity": 100,
+        "manufacturer": "Coherent",
+        "maxPower_mW": 70,
+        "model": "Obis LX",
+        "name": "LED",
+        "on": false,
+        "wavelength_nm": 100
+      }
+    ],
+    "lightsheetalignment": [
+      {
+        "name": "Y1",
+        "position": 2300
+      },
+      {
+        "name": "Z1",
+        "position": 1670
+      },
+      {
+        "name": "MEMS_3_B_X",
+        "position": -10
+      },
+      {
+        "name": "MEMS_3_B_Y",
+        "position": 0
+      },
+      {
+        "name": "Y2",
+        "position": 5300
+      },
+      {
+        "name": "Z2",
+        "position": 880
+      },
+      {
+        "name": "MEMS_3_A_X",
+        "position": 0
+      },
+      {
+        "name": "MEMS_3_A_Y",
+        "position": 0
+      }
+    ],
+    "magchangers": [
+      {
+        "name": "mc_right",
+        "selection": "200"
+      }
+    ],
+    "microscopeInfo": {
+      "opticalConfiguration": "default",
+      "scopeType": "MuVi-SPIM",
+      "serialNumber": "10279",
+      "softwareVersion": "3.17.6-beta",
+      "timeStamp": "2026-03-02 14:44:35"
+    },
+    "objectives": [
+      {
+        "direction": [
+          0,
+          0,
+          1
+        ],
+        "name": "right",
+        "pairedTubeLens": 0,
+        "properties": {
+          "focalLength": 20,
+          "immersion": "glycerol",
+          "magnification": 10,
+          "manufacturer": "Nikon",
+          "model": "CFI Plan Apo 10XC Glyc",
+          "na": 0.5,
+          "wd_mm": 5.5
+        },
+        "roles": [
+          "detection"
+        ]
+      },
+      {
+        "direction": [
+          1,
+          0,
+          0
+        ],
+        "name": "front",
+        "pairedTubeLens": 200,
+        "properties": {
+          "focalLength": 50,
+          "immersion": "air",
+          "magnification": 4,
+          "manufacturer": "Nikon",
+          "model": "CFI Plan Apo Lambda 4x",
+          "na": 0.2,
+          "wd_mm": 20
+        },
+        "roles": [
+          "illumination"
+        ]
+      },
+      {
+        "direction": [
+          -1,
+          0,
+          0
+        ],
+        "name": "back",
+        "pairedTubeLens": 200,
+        "properties": {
+          "focalLength": 50,
+          "immersion": "air",
+          "magnification": 4,
+          "manufacturer": "Nikon",
+          "model": "CFI Plan Apo Lambda 4x",
+          "na": 0.2,
+          "wd_mm": 20
+        },
+        "roles": [
+          "illumination"
+        ]
+      }
+    ],
+    "scanners": [
+      {
+        "mode": "autoscan",
+        "name": "Scan_Front",
+        "offset": 0,
+        "settings_destripe": {
+          "amplitude": 0.1,
+          "frequency": 200
+        },
+        "settings_scan": {
+          "amplitude": 0.5,
+          "numberOfScans": 1
+        },
+        "settings_sim": {
+          "numberOfPositions": 3,
+          "patternPeriod": 0.1
+        }
+      },
+      {
+        "mode": "autoscan",
+        "name": "Scan_Back",
+        "offset": 0,
+        "settings_destripe": {
+          "amplitude": 0.1,
+          "frequency": 200
+        },
+        "settings_scan": {
+          "amplitude": 0.5,
+          "numberOfScans": 1
+        },
+        "settings_sim": {
+          "numberOfPositions": 3,
+          "patternPeriod": 0.1
+        }
+      },
+      {
+        "mode": "park",
+        "name": "MEMS",
+        "offset": 0,
+        "settings_destripe": {
+          "amplitude": 5,
+          "frequency": 200
+        },
+        "settings_scan": {
+          "amplitude": 5,
+          "numberOfScans": 1
+        },
+        "settings_sim": {
+          "numberOfPositions": 3,
+          "patternPeriod": 0.1
+        }
+      }
+    ],
+    "stack": {
+      "biDirectionalReps": true,
+      "description": "",
+      "elements": [
+        {
+          "canTile": true,
+          "end": -17002.225,
+          "instack": false,
+          "name": "x",
+          "start": -17002.225,
+          "target": "x"
+        },
+        {
+          "canTile": true,
+          "end": -5200.1,
+          "instack": false,
+          "name": "y",
+          "start": -5200.1,
+          "target": "y"
+        },
+        {
+          "canTile": false,
+          "end": 25.986,
+          "instack": true,
+          "name": "z",
+          "start": 25.986,
+          "target": "z"
+        },
+        {
+          "canTile": false,
+          "end": 16.9,
+          "instack": false,
+          "name": "r",
+          "start": 16.9,
+          "target": "r"
+        }
+      ],
+      "n": 1,
+      "ref": "z",
+      "reps": 1,
+      "stageSet": "cleared_10x"
+    },
+    "stages": [
+      {
+        "active": [
+          false
+        ],
+        "guiName": [
+          "x"
+        ],
+        "movement": {
+          "direction": [
+            0,
+            -1,
+            0
+          ],
+          "offset_um": [
+            0,
+            0,
+            0
+          ]
+        },
+        "name": "x",
+        "partOf": [
+          "live"
+        ],
+        "type": "linear"
+      },
+      {
+        "active": [
+          false
+        ],
+        "guiName": [
+          "y"
+        ],
+        "movement": {
+          "direction": [
+            -1,
+            0,
+            0
+          ],
+          "offset_um": [
+            0,
+            0,
+            0
+          ]
+        },
+        "name": "y",
+        "partOf": [
+          "live"
+        ],
+        "type": "linear"
+      },
+      {
+        "active": [
+          false
+        ],
+        "guiName": [
+          "z"
+        ],
+        "movement": {
+          "direction": [
+            0,
+            0,
+            -1
+          ],
+          "offset_um": [
+            0,
+            0,
+            0
+          ]
+        },
+        "name": "z",
+        "partOf": [
+          "live"
+        ],
+        "type": "linear"
+      },
+      {
+        "active": [
+          false
+        ],
+        "guiName": [
+          "r"
+        ],
+        "movement": {
+          "direction": [
+            0,
+            -1,
+            0
+          ],
+          "offset_um": [
+            12.569856030601322,
+            0,
+            225.64841913590092
+          ]
+        },
+        "name": "r",
+        "partOf": [
+          "live"
+        ],
+        "type": "rotation"
+      },
+      {
+        "active": [
+          false
+        ],
+        "guiName": [
+          "x"
+        ],
+        "movement": {
+          "direction": [
+            0,
+            -1,
+            0
+          ],
+          "offset_um": [
+            0,
+            0,
+            0
+          ]
+        },
+        "name": "xcl_20x",
+        "partOf": [
+          "cleared_20x"
+        ],
+        "type": "linear"
+      },
+      {
+        "active": [
+          false
+        ],
+        "guiName": [
+          "y"
+        ],
+        "movement": {
+          "direction": [
+            -1,
+            0,
+            0
+          ],
+          "offset_um": [
+            0,
+            0,
+            0
+          ]
+        },
+        "name": "ycl_20x",
+        "partOf": [
+          "cleared_20x"
+        ],
+        "type": "linear"
+      },
+      {
+        "active": [
+          false
+        ],
+        "guiName": [
+          "z"
+        ],
+        "movement": {
+          "direction": [
+            0,
+            0,
+            -1
+          ],
+          "offset_um": [
+            0,
+            0,
+            0
+          ]
+        },
+        "name": "zcl_20x",
+        "partOf": [
+          "cleared_20x"
+        ],
+        "type": "linear"
+      },
+      {
+        "active": [
+          false
+        ],
+        "guiName": [
+          "r"
+        ],
+        "movement": {
+          "direction": [
+            0,
+            -1,
+            0
+          ],
+          "offset_um": [
+            -1564.599179950995,
+            0,
+            107.15854123234332
+          ]
+        },
+        "name": "rcl_20x",
+        "partOf": [
+          "cleared_20x"
+        ],
+        "type": "rotation"
+      },
+      {
+        "active": [
+          true
+        ],
+        "guiName": [
+          "x"
+        ],
+        "movement": {
+          "direction": [
+            0,
+            -1,
+            0
+          ],
+          "offset_um": [
+            0,
+            0,
+            0
+          ]
+        },
+        "name": "xcl_10x",
+        "partOf": [
+          "cleared_10x"
+        ],
+        "type": "linear"
+      },
+      {
+        "active": [
+          true
+        ],
+        "guiName": [
+          "y"
+        ],
+        "movement": {
+          "direction": [
+            -1,
+            0,
+            0
+          ],
+          "offset_um": [
+            0,
+            0,
+            0
+          ]
+        },
+        "name": "ycl_10x",
+        "partOf": [
+          "cleared_10x"
+        ],
+        "type": "linear"
+      },
+      {
+        "active": [
+          true
+        ],
+        "guiName": [
+          "z"
+        ],
+        "movement": {
+          "direction": [
+            0,
+            0,
+            -1
+          ],
+          "offset_um": [
+            0,
+            0,
+            0
+          ]
+        },
+        "name": "zcl_10x",
+        "partOf": [
+          "cleared_10x"
+        ],
+        "type": "linear"
+      },
+      {
+        "active": [
+          true
+        ],
+        "guiName": [
+          "r"
+        ],
+        "movement": {
+          "direction": [
+            0,
+            -1,
+            0
+          ],
+          "offset_um": [
+            -1564.599179950995,
+            0,
+            107.15854123234332
+          ]
+        },
+        "name": "rcl_10x",
+        "partOf": [
+          "cleared_10x"
+        ],
+        "type": "rotation"
+      },
+      {
+        "active": [
+          false
+        ],
+        "guiName": [
+          "x"
+        ],
+        "movement": {
+          "direction": [
+            0,
+            -1,
+            0
+          ],
+          "offset_um": [
+            0,
+            0,
+            0
+          ]
+        },
+        "name": "xcl",
+        "partOf": [
+          "cleared"
+        ],
+        "type": "linear"
+      },
+      {
+        "active": [
+          false
+        ],
+        "guiName": [
+          "y"
+        ],
+        "movement": {
+          "direction": [
+            -1,
+            0,
+            0
+          ],
+          "offset_um": [
+            0,
+            0,
+            0
+          ]
+        },
+        "name": "ycl",
+        "partOf": [
+          "cleared"
+        ],
+        "type": "linear"
+      },
+      {
+        "active": [
+          false
+        ],
+        "guiName": [
+          "z"
+        ],
+        "movement": {
+          "direction": [
+            0,
+            0,
+            -1
+          ],
+          "offset_um": [
+            0,
+            0,
+            0
+          ]
+        },
+        "name": "zcl",
+        "partOf": [
+          "cleared"
+        ],
+        "type": "linear"
+      },
+      {
+        "active": [
+          false
+        ],
+        "guiName": [
+          "r"
+        ],
+        "movement": {
+          "direction": [
+            0,
+            -1,
+            0
+          ],
+          "offset_um": [
+            -1564.599179950995,
+            0,
+            107.15854123234332
+          ]
+        },
+        "name": "rcl",
+        "partOf": [
+          "cleared"
+        ],
+        "type": "rotation"
+      }
+    ],
+    "timings": {
+      "delayAfter_ms": 11,
+      "delayBefore_ms": 0,
+      "exposure_ms": 100
+    },
+    "triggers": [],
+    "userios": {
+      "settings": [
+        {
+          "channel": "output",
+          "inChannel": false,
+          "mode": "perStack",
+          "name": "Out1",
+          "state": false
+        },
+        {
+          "channel": "output",
+          "inChannel": false,
+          "mode": "perStack",
+          "name": "Out3",
+          "state": false
+        },
+        {
+          "channel": "output",
+          "inChannel": false,
+          "mode": "perStack",
+          "name": "Out4",
+          "state": false
+        },
+        {
+          "channel": "input",
+          "inChannel": false,
+          "mode": "perStack",
+          "name": "In1",
+          "state": false
+        },
+        {
+          "channel": "input",
+          "inChannel": false,
+          "mode": "perStack",
+          "name": "In2",
+          "state": false
+        },
+        {
+          "channel": "input",
+          "inChannel": false,
+          "mode": "perStack",
+          "name": "In3",
+          "state": false
+        },
+        {
+          "channel": "input",
+          "inChannel": false,
+          "mode": "perStack",
+          "name": "In4",
+          "state": false
+        }
+      ],
+      "timeout ms": 500
+    }
+  },
+  "cameraData": {
+    "device": {
+      "roi": {
+        "height": 2048,
+        "left": 0,
+        "top": 0,
+        "width": 2048
+      },
+      "shutter": "Global",
+      "trigger_mode": "Level"
+    },
+    "on_off_state": "On",
+    "slit_size": 20
+  },
+  "imagingBranch": {
+    "camera": "right",
+    "detection": {
+      "filterwheels": [
+        "fw_right"
+      ],
+      "magchangers": [
+        "mc_right"
+      ],
+      "objectives": [
+        "right"
+      ],
+      "stages": [
+        "*"
+      ]
+    },
+    "illumination": [
+      {
+        "beamexpander": [
+          "beamexpander"
+        ],
+        "lasers": [
+          "*"
+        ],
+        "lightsheetalignment": [
+          "Y1",
+          "Z1"
+        ],
+        "objectives": [
+          "front"
+        ],
+        "scanners": [
+          "scan_front"
+        ]
+      },
+      {
+        "beamexpander": [
+          "beamexpander"
+        ],
+        "lasers": [
+          "*"
+        ],
+        "lightsheetalignment": [
+          "Y2",
+          "Z2"
+        ],
+        "objectives": [
+          "back"
+        ],
+        "scanners": [
+          "scan_back"
+        ]
+      }
+    ],
+    "image_plane_vectors": {
+      "cam_left_to_right": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "cam_top_to_bottom": [
+        0.0,
+        1.0,
+        0.0
+      ]
+    }
+  }
+}

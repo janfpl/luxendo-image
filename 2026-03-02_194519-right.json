@@ -107,9 +107,9 @@
     "acquisition": [
       {
         "microscope_type": "MuVi-SPIM",
-        "serial_number": "10279",
-        "lux_bundle_version": "5.2.2-alpha.5",
-        "embedded_version": "3.17.6-beta",
+        "serial_number": "00000",
+        "lux_bundle_version": " ",
+        "embedded_version": " ",
         "edits": [],
         "contains_beads": false,
         "time_point": "0",

@@ -63,6 +63,14 @@ def get_rotation_angles(proc_info):
     return angles
 
 
+def get_detection_directions(proc_info):
+    """Extract detection_directions as a hashable tuple of tuples."""
+    dd = proc_info.get("detection_directions", None)
+    if dd is None:
+        return None
+    return tuple(tuple(v) for v in dd)
+
+
 def make_rotation_matrix_y(angle_deg):
     """Build a 3x3 Y-axis rotation matrix for the given angle in degrees.
 
@@ -208,9 +216,11 @@ def main():
 
     print(f"Found {len(h5_files)} .lux.h5 file(s):\n")
 
-    # Collect rotation angles from all files
+    # Collect rotation angles and detection directions from all files
     file_angles = {}  # filepath -> list of (start_deg, end_deg)
+    file_det_dirs = {}  # filepath -> tuple of tuples (hashable detection_directions)
     all_angle_pairs = []
+    all_det_dirs = []
 
     for fp in h5_files:
         metadata = read_h5_metadata(fp)
@@ -219,6 +229,7 @@ def main():
 
         proc_info = metadata.get("processingInformation", metadata)
         angles = get_rotation_angles(proc_info)
+        det_dirs = get_detection_directions(proc_info)
 
         if not angles:
             print(f"  {fp}: no rotation stage_positions found, skipping.")
@@ -226,60 +237,108 @@ def main():
 
         file_angles[fp] = angles
         all_angle_pairs.extend(angles)
+
+        if det_dirs is not None:
+            file_det_dirs[fp] = det_dirs
+            all_det_dirs.append(det_dirs)
+
         print(f"  {fp}: rotation angle(s) = {angles}")
+        if det_dirs is not None:
+            print(f"         detection_directions = {[list(v) for v in det_dirs]}")
 
     if not all_angle_pairs:
         print("\nNo rotation angles found in any file.")
         sys.exit(0)
 
-    # Majority vote
-    counts = Counter(all_angle_pairs)
-    consensus_pair = counts.most_common(1)[0][0]
+    # Majority vote on rotation angles
+    angle_counts = Counter(all_angle_pairs)
+    consensus_pair = angle_counts.most_common(1)[0][0]
     consensus_start, consensus_end = consensus_pair
 
     print(f"\nConsensus rotation angle: start_deg={consensus_start}, end_deg={consensus_end}")
-    print(f"  (found in {counts[consensus_pair]} of {len(all_angle_pairs)} rotation entries)\n")
+    print(f"  (found in {angle_counts[consensus_pair]} of {len(all_angle_pairs)} rotation entries)")
 
-    # Find files that need updating
-    files_to_fix = []
+    # Majority vote on detection directions
+    consensus_det_dirs_tuple = None
+    if all_det_dirs:
+        dd_counts = Counter(all_det_dirs)
+        consensus_det_dirs_tuple = dd_counts.most_common(1)[0][0]
+        print(f"\nConsensus detection_directions: {[list(v) for v in consensus_det_dirs_tuple]}")
+        print(f"  (found in {dd_counts[consensus_det_dirs_tuple]} of {len(all_det_dirs)} files)")
+
+    print()
+
+    # Find files that need updating (angles OR detection_directions mismatch)
+    files_to_fix = set()
+    angle_mismatch = set()
+    dd_mismatch = set()
+
     for fp, angles in file_angles.items():
         if any(a != consensus_pair for a in angles):
-            files_to_fix.append(fp)
+            files_to_fix.add(fp)
+            angle_mismatch.add(fp)
+
+    if consensus_det_dirs_tuple is not None:
+        for fp in file_angles:
+            file_dd = file_det_dirs.get(fp)
+            if file_dd is not None and file_dd != consensus_det_dirs_tuple:
+                files_to_fix.add(fp)
+                dd_mismatch.add(fp)
 
     if not files_to_fix:
-        print("All rotation angles already match. Nothing to do.")
+        print("All rotation angles and detection directions already match. Nothing to do.")
         sys.exit(0)
 
-    print(f"Files to update: {len(files_to_fix)}\n")
+    if angle_mismatch:
+        print(f"Files with angle mismatch: {len(angle_mismatch)}")
+    if dd_mismatch:
+        print(f"Files with detection_directions mismatch: {len(dd_mismatch)}")
+    print(f"Total files to update: {len(files_to_fix)}\n")
 
-    # Extract the exact rotation matrix and detection_directions from a
-    # consensus file so we can copy them verbatim (no trig recalculation).
+    # Extract the exact rotation matrix from a consensus file so we can
+    # copy it verbatim (no trig recalculation).
     consensus_matrix = None
-    consensus_det_dirs = None
     for fp, angles in file_angles.items():
         if all(a == consensus_pair for a in angles):
             ref_meta = read_h5_metadata(fp)
             ref_proc = ref_meta.get("processingInformation", ref_meta)
-            consensus_matrix, consensus_det_dirs = extract_rotation_affine(ref_proc)
+            consensus_matrix, _ = extract_rotation_affine(ref_proc)
             if consensus_matrix is not None:
                 print(f"Using rotation matrix from reference file: {fp}")
-                print(f"  matrix: {consensus_matrix}")
-                print(f"  detection_directions: {consensus_det_dirs}\n")
+                print(f"  matrix: {consensus_matrix}\n")
                 break
 
     if consensus_matrix is None:
         print("WARNING: Could not extract rotation matrix from any consensus file.")
         print("         Angle values will be updated but matrices will be unchanged.\n")
 
+    # Convert consensus detection_directions back to list-of-lists for writing
+    consensus_det_dirs = None
+    if consensus_det_dirs_tuple is not None:
+        consensus_det_dirs = [list(v) for v in consensus_det_dirs_tuple]
+
     # Update each mismatched file
-    for fp in files_to_fix:
-        print(f"Updating {fp}...")
+    for fp in sorted(files_to_fix):
+        reasons = []
+        if fp in angle_mismatch:
+            reasons.append("angles")
+        if fp in dd_mismatch:
+            reasons.append("detection_directions")
+        print(f"Updating {fp} ({', '.join(reasons)})...")
 
         # Update H5 metadata
         metadata = read_h5_metadata(fp)
         proc_info = metadata.get("processingInformation", metadata)
-        if update_processing_info(proc_info, consensus_start, consensus_end,
-                                  consensus_matrix, consensus_det_dirs):
+        h5_changed = update_processing_info(proc_info, consensus_start, consensus_end,
+                                            consensus_matrix, consensus_det_dirs)
+
+        # Also fix detection_directions even if angles already matched
+        if fp in dd_mismatch and not (fp in angle_mismatch):
+            if consensus_det_dirs is not None:
+                proc_info["detection_directions"] = [v[:] for v in consensus_det_dirs]
+                h5_changed = True
+
+        if h5_changed:
             write_h5_metadata(fp, metadata)
             print(f"  H5 metadata updated.")
 
@@ -297,6 +356,12 @@ def main():
             if sidecar_proc:
                 update_processing_info(sidecar_proc, consensus_start, consensus_end,
                                        consensus_matrix, consensus_det_dirs)
+                # Fix detection_directions independently if only dd mismatched
+                if fp in dd_mismatch and not (fp in angle_mismatch):
+                    if consensus_det_dirs is not None:
+                        sidecar_proc["detection_directions"] = [
+                            v[:] for v in consensus_det_dirs
+                        ]
 
             # Update metaData.stack.elements
             update_json_sidecar_extra(sidecar, consensus_start, consensus_end)
@@ -306,8 +371,10 @@ def main():
         else:
             print(f"  No JSON sidecar found at {json_path}")
 
-    print(f"\nDone. Updated {len(files_to_fix)} file(s) to consensus rotation angle "
-          f"(start_deg={consensus_start}, end_deg={consensus_end}).")
+    print(f"\nDone. Updated {len(files_to_fix)} file(s).")
+    print(f"  Consensus angle: start_deg={consensus_start}, end_deg={consensus_end}")
+    if consensus_det_dirs is not None:
+        print(f"  Consensus detection_directions: {consensus_det_dirs}")
 
 
 if __name__ == "__main__":

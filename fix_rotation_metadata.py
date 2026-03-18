@@ -190,10 +190,20 @@ def update_json_sidecar_extra(sidecar_data, new_start, new_end):
 
 
 def main():
-    h5_files = sorted(glob.glob("*.lux.h5"))
+    # Default to ./snapshots if it exists, otherwise fall back to current directory
+    snapshots_dir = os.path.join(os.getcwd(), "snapshots")
+    if os.path.isdir(snapshots_dir):
+        work_dir = snapshots_dir
+        print(f"Found snapshots folder: {snapshots_dir}")
+    else:
+        work_dir = os.getcwd()
+        print(f"No snapshots folder found, using current directory: {work_dir}")
+
+    search_pattern = os.path.join(work_dir, "*.lux.h5")
+    h5_files = sorted(glob.glob(search_pattern))
 
     if not h5_files:
-        print("No .lux.h5 files found in the current directory.")
+        print(f"\nNo .lux.h5 files found in {work_dir}")
         sys.exit(0)
 
     print(f"Found {len(h5_files)} .lux.h5 file(s):\n")

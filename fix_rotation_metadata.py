@@ -81,23 +81,6 @@ def make_rotation_matrix_y(angle_deg):
     ]
 
 
-def mat_vec_mul(mat, vec):
-    """Multiply a 3x3 matrix by a 3-vector."""
-    return [
-        sum(mat[i][j] * vec[j] for j in range(3))
-        for i in range(3)
-    ]
-
-
-def vec_sub(a, b):
-    """Subtract two 3-vectors: a - b."""
-    return [a[i] - b[i] for i in range(3)]
-
-
-def round_vec(v, decimals=7):
-    """Round each element of a vector."""
-    return [round(x, decimals) for x in v]
-
 
 def is_rotation_matrix(matrix, angle_deg, tol=1e-4):
     """Check if a 3x3 matrix matches a Y-axis rotation by the given angle."""
@@ -127,21 +110,37 @@ def find_rotation_affine_index(affines, angle_deg):
     return None
 
 
-def compute_translation(rotation_matrix, offset_um):
-    """Compute affine translation = R * offset - offset."""
-    r_offset = mat_vec_mul(rotation_matrix, offset_um)
-    return round_vec(vec_sub(r_offset, offset_um))
+
+def extract_rotation_affine(proc_info):
+    """Extract the rotation affine matrix and detection_directions from metadata.
+
+    Returns (matrix, detection_directions) or (None, None) if not found.
+    """
+    for acq in proc_info.get("acquisition", []):
+        for sp in acq.get("stage_positions", []):
+            if sp.get("type") == "rotation":
+                angle = sp["start_deg"]
+                affines = proc_info.get("affine_to_sample", [])
+                rot_idx = find_rotation_affine_index(affines, angle)
+                matrix = affines[rot_idx]["matrix"] if rot_idx is not None else None
+                det_dirs = proc_info.get("detection_directions", None)
+                return matrix, det_dirs
+    return None, None
 
 
-def update_processing_info(proc_info, new_start, new_end):
+def update_processing_info(proc_info, new_start, new_end, consensus_matrix,
+                           consensus_detection_dirs):
     """Update all rotation-related metadata in a processingInformation dict.
+
+    Copies the exact matrix and detection_directions from the consensus file
+    instead of recalculating from trig, to avoid floating-point drift.
+    Translation is left unchanged as it varies per xy tile.
 
     Returns True if any changes were made.
     """
     changed = False
 
     for acq in proc_info.get("acquisition", []):
-        # Find rotation stage position and its offset
         rotation_sp = None
         for sp in acq.get("stage_positions", []):
             if sp.get("type") == "rotation":
@@ -158,26 +157,24 @@ def update_processing_info(proc_info, new_start, new_end):
             continue
 
         changed = True
-        offset_um = rotation_sp.get("movement", {}).get("offset_um", [0.0, 0.0, 0.0])
 
-        # Update stage_positions
+        # Update stage_positions angles
         rotation_sp["start_deg"] = new_start
         rotation_sp["end_deg"] = new_end
 
-        # Update affine_to_sample rotation transform
-        affines = proc_info.get("affine_to_sample", [])
-        rot_idx = find_rotation_affine_index(affines, old_start)
-        if rot_idx is not None:
-            new_matrix = make_rotation_matrix_y(new_start)
-            new_translation = compute_translation(new_matrix, offset_um)
-            affines[rot_idx]["matrix"] = new_matrix
-            affines[rot_idx]["translation"] = new_translation
+        # Copy the exact rotation matrix from the consensus file
+        # (translation is left as-is since it varies per xy tile)
+        if consensus_matrix is not None:
+            affines = proc_info.get("affine_to_sample", [])
+            rot_idx = find_rotation_affine_index(affines, old_start)
+            if rot_idx is not None:
+                affines[rot_idx]["matrix"] = [row[:] for row in consensus_matrix]
 
-        # Update detection_directions
-        det_dir = acq.get("detection", {}).get("direction", [0.0, 0.0, 1.0])
-        new_matrix = make_rotation_matrix_y(new_start)
-        new_det_dirs = [round_vec(mat_vec_mul(new_matrix, det_dir))]
-        proc_info["detection_directions"] = new_det_dirs
+        # Copy detection_directions from the consensus file
+        if consensus_detection_dirs is not None:
+            proc_info["detection_directions"] = [
+                v[:] for v in consensus_detection_dirs
+            ]
 
     return changed
 
@@ -245,6 +242,25 @@ def main():
 
     print(f"Files to update: {len(files_to_fix)}\n")
 
+    # Extract the exact rotation matrix and detection_directions from a
+    # consensus file so we can copy them verbatim (no trig recalculation).
+    consensus_matrix = None
+    consensus_det_dirs = None
+    for fp, angles in file_angles.items():
+        if all(a == consensus_pair for a in angles):
+            ref_meta = read_h5_metadata(fp)
+            ref_proc = ref_meta.get("processingInformation", ref_meta)
+            consensus_matrix, consensus_det_dirs = extract_rotation_affine(ref_proc)
+            if consensus_matrix is not None:
+                print(f"Using rotation matrix from reference file: {fp}")
+                print(f"  matrix: {consensus_matrix}")
+                print(f"  detection_directions: {consensus_det_dirs}\n")
+                break
+
+    if consensus_matrix is None:
+        print("WARNING: Could not extract rotation matrix from any consensus file.")
+        print("         Angle values will be updated but matrices will be unchanged.\n")
+
     # Update each mismatched file
     for fp in files_to_fix:
         print(f"Updating {fp}...")
@@ -252,7 +268,8 @@ def main():
         # Update H5 metadata
         metadata = read_h5_metadata(fp)
         proc_info = metadata.get("processingInformation", metadata)
-        if update_processing_info(proc_info, consensus_start, consensus_end):
+        if update_processing_info(proc_info, consensus_start, consensus_end,
+                                  consensus_matrix, consensus_det_dirs):
             write_h5_metadata(fp, metadata)
             print(f"  H5 metadata updated.")
 
@@ -268,7 +285,8 @@ def main():
             # Update processingInformation in sidecar
             sidecar_proc = sidecar.get("processingInformation", None)
             if sidecar_proc:
-                update_processing_info(sidecar_proc, consensus_start, consensus_end)
+                update_processing_info(sidecar_proc, consensus_start, consensus_end,
+                                       consensus_matrix, consensus_det_dirs)
 
             # Update metaData.stack.elements
             update_json_sidecar_extra(sidecar, consensus_start, consensus_end)
